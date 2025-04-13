@@ -6,6 +6,8 @@ This project implements a highly available three-tier web architecture on AWS us
 
 ![Three-Tier Architecture](./images/3TierArch.png)
 
+*Architecture diagram source: [AWS Three-Tier Web Architecture Workshop](https://github.com/aws-samples/aws-three-tier-web-architecture-workshop)*
+
 ## Architecture Overview
 
 The infrastructure consists of:
@@ -93,14 +95,19 @@ terraform apply
 
 ```
 .
-├── main.tf           # Main configuration file
-├── variables.tf      # Input variables
-├── outputs.tf        # Output values
+├── README.md         # Project documentation
+├── main.tf          # Main configuration file
+├── variables.tf     # Input variables
+├── outputs.tf       # Output values
+├── backend.tf       # S3 backend configuration
+├── setup-backend.sh # Backend infrastructure setup script
+├── images/         # Documentation images
+│   └── 3TierArch.png  # Architecture diagram
 ├── modules/
-│   ├── vpc/         # VPC and networking resources
-│   ├── web_tier/    # Web tier resources
-│   ├── app_tier/    # Application tier resources
-│   └── database/    # Database tier resources
+│   ├── vpc/        # VPC and networking resources
+│   ├── web_tier/   # Web tier resources
+│   ├── app_tier/   # Application tier resources
+│   └── database/   # Database tier resources
 ```
 
 ## Security Considerations
