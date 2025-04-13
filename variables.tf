@@ -47,7 +47,7 @@ variable "key_name" {
 variable "project_tags" {
   description = "Tags to be applied to all resources"
   type        = map(string)
-  default     = {
+  default = {
     Project     = "3TierApp"
     Environment = "Production"
     Terraform   = "true"

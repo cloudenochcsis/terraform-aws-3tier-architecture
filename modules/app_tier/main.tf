@@ -30,7 +30,7 @@ resource "aws_launch_template" "app" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups            = [aws_security_group.app.id]
+    security_groups             = [aws_security_group.app.id]
   }
 
   user_data = base64encode(<<-EOF
@@ -51,7 +51,7 @@ resource "aws_lb" "app" {
   internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.app.id]
-  subnets           = var.private_subnet_ids
+  subnets            = var.private_subnet_ids
 
   tags = merge(var.project_tags, {
     Name = "app-tier-alb"
@@ -66,14 +66,14 @@ resource "aws_lb_target_group" "app" {
   vpc_id   = var.vpc_id
 
   health_check {
-    enabled             = true
-    healthy_threshold   = 2
-    interval           = 30
-    timeout            = 5
-    path               = "/health"
-    port               = "traffic-port"
-    protocol           = "HTTP"
-    matcher            = "200"
+    enabled           = true
+    healthy_threshold = 2
+    interval          = 30
+    timeout           = 5
+    path              = "/health"
+    port              = "traffic-port"
+    protocol          = "HTTP"
+    matcher           = "200"
   }
 
   tags = merge(var.project_tags, {
@@ -96,9 +96,9 @@ resource "aws_lb_listener" "app" {
 # Auto Scaling Group
 resource "aws_autoscaling_group" "app" {
   desired_capacity    = 2
-  max_size           = 4
-  min_size           = 2
-  target_group_arns  = [aws_lb_target_group.app.arn]
+  max_size            = 4
+  min_size            = 2
+  target_group_arns   = [aws_lb_target_group.app.arn]
   vpc_zone_identifier = var.private_subnet_ids
 
   launch_template {
