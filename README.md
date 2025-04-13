@@ -39,10 +39,27 @@ The infrastructure consists of:
 - AWS CLI configured with appropriate credentials
 - SSH key pair in your AWS region
 
+## Backend Configuration
+
+This project uses an S3 backend with DynamoDB state locking. Before initializing Terraform:
+
+1. Run the backend setup script:
+```bash
+chmod +x setup-backend.sh
+./setup-backend.sh
+```
+
+This will create:
+- S3 bucket for state storage
+- Versioning enabled on the bucket
+- Server-side encryption
+- DynamoDB table for state locking
+
 ## Quick Start
 
 1. Clone this repository
-2. Create a `terraform.tfvars` file with your values:
+2. Set up the backend infrastructure (see Backend Configuration above)
+3. Create a `terraform.tfvars` file with your values:
 ```hcl
 aws_region = "us-west-2"
 vpc_cidr = "10.0.0.0/16"
