@@ -60,4 +60,5 @@ module "database" {
   db_name            = var.db_name
   db_username        = var.db_username
   db_password        = var.db_password
+  app_sg_id          = module.app_tier.app_security_group_id
 }
