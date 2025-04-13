@@ -2,6 +2,10 @@
 
 This project implements a highly available three-tier web architecture on AWS using Terraform. The architecture spans multiple Availability Zones and includes web, application, and database tiers with appropriate security and networking configurations.
 
+## Architecture Diagram
+
+![Three-Tier Architecture](./images/3TierArch.png)
+
 ## Architecture Overview
 
 The infrastructure consists of:
