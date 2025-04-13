@@ -9,18 +9,27 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region  = var.aws_region
+  profile = "DevOps-Admin"
 }
 
 # VPC Module
 module "vpc" {
   source = "./modules/vpc"
 
-  vpc_cidr                = var.vpc_cidr
-  public_subnet_cidrs     = var.public_subnet_cidrs
+  vpc_cidr                 = var.vpc_cidr
+  public_subnet_cidrs      = var.public_subnet_cidrs
   private_app_subnet_cidrs = var.private_app_subnet_cidrs
-  private_db_subnet_cidrs = var.private_db_subnet_cidrs
-  project_tags            = var.project_tags
+  private_db_subnet_cidrs  = var.private_db_subnet_cidrs
+  project_tags             = var.project_tags
+}
+
+# Create security groups first
+module "security_groups" {
+  source = "./modules/security"
+
+  vpc_id       = module.vpc.vpc_id
+  project_tags = var.project_tags
 }
 
 # Web Tier Module
@@ -30,35 +39,35 @@ module "web_tier" {
   vpc_id            = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnet_ids
   instance_type     = var.instance_type
-  ami_id           = var.ami_id
-  key_name         = var.key_name
-  project_tags     = var.project_tags
-  app_sg_id        = module.app_tier.app_security_group_id
+  ami_id            = var.ami_id
+  key_name          = var.key_name
+  project_tags      = var.project_tags
+  app_sg_id         = module.security_groups.app_security_group_id
 }
 
 # App Tier Module
 module "app_tier" {
   source = "./modules/app_tier"
 
-  vpc_id              = module.vpc.vpc_id
-  private_subnet_ids  = module.vpc.private_app_subnet_ids
-  instance_type       = var.instance_type
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_app_subnet_ids
+  instance_type      = var.instance_type
   ami_id             = var.ami_id
   key_name           = var.key_name
   project_tags       = var.project_tags
-  web_sg_id          = module.web_tier.web_security_group_id
-  db_sg_id           = module.database.db_security_group_id
+  web_sg_id          = module.security_groups.web_security_group_id
+  db_sg_id           = module.security_groups.db_security_group_id
 }
 
 # Database Module
 module "database" {
   source = "./modules/database"
 
-  vpc_id              = module.vpc.vpc_id
-  private_subnet_ids  = module.vpc.private_db_subnet_ids
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_db_subnet_ids
   project_tags       = var.project_tags
+  app_sg_id          = module.security_groups.app_security_group_id
   db_name            = var.db_name
   db_username        = var.db_username
   db_password        = var.db_password
-  app_sg_id          = module.app_tier.app_security_group_id
 }
