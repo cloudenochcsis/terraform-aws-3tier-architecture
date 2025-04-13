@@ -47,7 +47,7 @@ The infrastructure consists of:
 
 ## Backend Configuration
 
-This project uses an S3 backend with DynamoDB state locking. Before initializing Terraform:
+This project uses an S3 backend with file-based locking. Before initializing Terraform:
 
 1. Run the backend setup script:
 ```bash
@@ -59,7 +59,7 @@ This will create:
 - S3 bucket for state storage
 - Versioning enabled on the bucket
 - Server-side encryption
-- DynamoDB table for state locking
+- File-based state locking
 
 ## Quick Start
 

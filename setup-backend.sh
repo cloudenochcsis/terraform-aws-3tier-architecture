@@ -3,7 +3,6 @@
 # Variables
 BUCKET_NAME="cloudenochcsis-terraform-state"
 REGION="us-east-1"
-DYNAMODB_TABLE="terraform-state-lock"
 
 # Colors for output
 RED='\033[0;31m'
@@ -50,23 +49,7 @@ else
     exit 1
 fi
 
-# Create DynamoDB table
-if aws dynamodb describe-table --table-name "$DYNAMODB_TABLE" 2>/dev/null; then
-    echo -e "${GREEN}DynamoDB table $DYNAMODB_TABLE already exists${NC}"
-else
-    echo "Creating DynamoDB table..."
-    if aws dynamodb create-table \
-        --table-name "$DYNAMODB_TABLE" \
-        --attribute-definitions AttributeName=LockID,AttributeType=S \
-        --key-schema AttributeName=LockID,KeyType=HASH \
-        --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
-        --region "$REGION"; then
-        echo -e "${GREEN}Successfully created DynamoDB table${NC}"
-    else
-        echo -e "${RED}Failed to create DynamoDB table${NC}"
-        exit 1
-    fi
-fi
+
 
 echo -e "${GREEN}Backend infrastructure setup complete!${NC}"
 echo "You can now initialize Terraform with:"
