@@ -18,8 +18,8 @@ The infrastructure consists of:
 - 2 Private Subnets (App Tier)
 - 2 Private Subnets (Database Tier)
 - Internet Gateway for public access
-- NAT Gateway for private subnet outbound internet access
-- Route tables for public and private subnets
+- NAT Gateways in each AZ for high availability
+- Dedicated route tables for each AZ's private subnets
 
 ### 2. Web Tier
 - Auto Scaling Group of EC2 instances
@@ -109,6 +109,14 @@ terraform apply
 │   ├── app_tier/   # Application tier resources
 │   └── database/   # Database tier resources
 ```
+
+## High Availability Features
+
+- Multiple Availability Zones deployment for all tiers
+- NAT Gateway per AZ to prevent single point of failure
+- Dedicated route tables per AZ for network isolation
+- Auto Scaling Groups for web and application tiers
+- Aurora database with primary and replica instances
 
 ## Security Considerations
 
